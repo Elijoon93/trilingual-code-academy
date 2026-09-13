@@ -1,11 +1,11 @@
 {
   "name": "TriLingual Code Academy",
-  "version": "1.0.0-rc2-hf2-fa-localization-audit",
-  "repository_package": "manual-github-desktop-source",
+  "version": "1.0.0-rc3-final-acceptance",
+  "repository_package": "direct-github-finalization",
   "generated": "2026-09-13",
-  "index_sha256": "76f725861fadcbb87a88e47766acb0c459f0ec41edc228cecc3f27d25100a49c",
+  "index_sha256": "3d13340d8b64723129d249d44639ee4e813130052faf31681374b6cc60caa1d5",
   "storage_key": "trilingual_code_academy_state_v1",
   "schema": 13,
   "backup_format": 3,
-  "status": "RC2-HF2 static source package; not Final Stable until real-device gates pass"
+  "status": "RC3 FINAL ACCEPTANCE — automated GitHub gates included; physical Windows/Android/PWA gates pending"
 }
