@@ -2,29 +2,40 @@
 
 **English · Deutsch · Coding**
 
-نسخه مخزن دستی بر پایه آخرین سورس واقعی `RC2-HF2` پروژه. این مخزن دیگر برای اجرای برنامه به Loader سه‌تکه Base64 وابسته نیست؛ `index.html` خودِ برنامه کامل است.
+نسخه جاری مخزن: **1.0.0 RC3 — Final Acceptance**.
+
+این مخزن دیگر به Loader سه‌تکه Base64 وابسته نیست؛ `index.html` خودِ برنامه کامل است و Hotfix اجرای Code Lab نیز اعمال شده است.
 
 ## اجرای برنامه
-- وب: GitHub Pages از ریشه مخزن
-- محلی: `index.html` مستقیماً باز می‌شود؛ برای PWA/Service Worker از یک HTTP server محلی یا GitHub Pages استفاده شود.
+- وب: GitHub Pages از ریشه `main`
+- PWA: `manifest.webmanifest` + `sw.js`
+- Final Acceptance: `final-acceptance.html`
 
-## فایل‌های اصلی
-- `index.html` — سورس اجرایی کامل RC2-HF2
-- `manifest.webmanifest` — PWA manifest
-- `sw.js` — Service Worker
-- `offline.html` — fallback آفلاین
-- `icons/` — آیکون‌های PWA
-- `source/` — Snapshot محافظت‌شده سورس اصلی RC2-HF2
-- `docs/FINAL_AUDIT_REPORT_HF2_FA.md` — ممیزی قبلی HF2
-- `docs/PROJECT_MASTER_CONTEXT_FA.md` — نقشه و مفروضات مادر پروژه
-- `REPOSITORY_AUDIT_REPORT.txt` — ممیزی بسته فعلی
+## کنترل کیفیت خودکار
+هر Push روی `main` workflow با نام **Final Acceptance** را اجرا می‌کند و این موارد را بررسی می‌کند:
+- Static source audit
+- JavaScript syntax
+- Chromium runtime smoke
+- English / Deutsch / Coding routes
+- Planner
+- Code Lab runtime
+- LocalStorage persistence
+- Backup round-trip در صورت وجود تابع تشخیصی
 
 ## وضعیت نسخه
-- Version marker: `1.0.0-rc2-hf2-fa-localization-audit`
-- Storage key پایدار: `trilingual_code_academy_state_v1`
-- Backup Format 3 / Schema 13
-- تقویم جلالی و RTL حفظ شده است.
-- اعلام **Final Stable** منوط به تست واقعی Windows/Android/PWA و بازبینی انسانی محتوا است.
+- Version: `1.0.0-rc3-final-acceptance`
+- Storage key: `trilingual_code_academy_state_v1`
+- Backup Format: 3
+- Schema: 13
+- RTL / Persian / Jalali retained
 
-## GitHub Desktop
-راهنمای خیلی کوتاه داخل `docs/GITHUB_DESKTOP_UPLOAD_FA.txt` قرار دارد.
+## شرط Final Stable
+`1.0.0 Stable` فقط پس از PASS شدن GitHub Actions، صفحه `final-acceptance.html`، Windows smoke و Android/PWA install+offline اعلام می‌شود.
+
+## فایل‌های کلیدی
+- `index.html` — سورس اجرایی کامل
+- `final-acceptance.html` — تست مرورگر/PWA
+- `.github/workflows/final-acceptance.yml` — CI نهایی
+- `tests/` — ممیزی استاتیک، syntax و runtime browser smoke
+- `FINAL_ACCEPTANCE_V1.md` — Gateهای ارتقا به Stable
+- `RC3_FINALIZATION_AUDIT.txt` — گزارش بسته RC3
