@@ -1,11 +1,14 @@
 {
   "name": "TriLingual Code Academy",
-  "version": "1.0.0-rc3-final-acceptance",
-  "repository_package": "direct-github-finalization",
+  "version": "1.0.0",
+  "release_channel": "stable-web",
   "generated": "2026-09-13",
-  "index_sha256": "3d13340d8b64723129d249d44639ee4e813130052faf31681374b6cc60caa1d5",
+  "index_sha256": "2550fac1b17675e9f3922f6f7c9f7f7bd20912f3f17dbb57dc553dc90c5a56bd",
   "storage_key": "trilingual_code_academy_state_v1",
   "schema": 13,
   "backup_format": 3,
-  "status": "RC3 FINAL ACCEPTANCE — automated GitHub gates included; physical Windows/Android/PWA gates pending"
+  "automated_acceptance": "PASS",
+  "github_pages_deployment": "PASS",
+  "device_certification": "Windows/Android physical verification remains separately auditable and is not fabricated",
+  "status": "v1.0.0 Stable Web Release — automated static, JavaScript, Chromium runtime and GitHub Pages deployment gates PASS"
 }
