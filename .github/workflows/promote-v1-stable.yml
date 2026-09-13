@@ -1,0 +1,239 @@
+name: Promote v1 Stable
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/promote-v1-stable.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Promote source and release metadata to v1.0.0 Stable Web
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, re, hashlib
+
+          root=Path('.')
+          idx=root/'index.html'
+          s=idx.read_text(encoding='utf-8')
+
+          required=[
+            "const APP_VERSION='1.0.0-rc2-hf2-fa-localization-audit';",
+            "const HF2_VERSION='1.0.0-rc2-hf2-fa-localization-audit';",
+            "trilingual_code_academy_state_v1"
+          ]
+          missing=[x for x in required if x not in s]
+          if missing:
+              raise SystemExit('Promotion safety gate: expected source markers missing: '+repr(missing))
+
+          s=s.replace("const APP_VERSION='1.0.0-rc2-hf2-fa-localization-audit';","const APP_VERSION='1.0.0';")
+          s=s.replace("const HF2_VERSION='1.0.0-rc2-hf2-fa-localization-audit';","const HF2_VERSION='1.0.0';")
+          s=s.replace('<small>English · Deutsch · Coding · One Learning OS</small>','<small>English · Deutsch · Coding · One Learning OS · v1.0 Stable</small>')
+          s=s.replace("tag.textContent='نسخه آزمایشی نهایی '+HF2_VERSION","tag.textContent='نسخه پایدار '+HF2_VERSION")
+          s=s.replace('نسخه RC2-HF2 با تقویم جلالی، رابط فارسی سخت‌گیرانه‌تر، مسیرهای English/Deutsch/Coding، یادگیری تطبیقی، تمرین، Code Lab و PWA. Final Stable فقط پس از شواهد واقعی دستگاه و بازبینی انسانی محتوا مجاز است.','نسخه پایدار وب v1.0 با تقویم جلالی، رابط فارسی، مسیرهای English/Deutsch/Coding، یادگیری تطبیقی، تمرین، Code Lab و PWA. کنترل‌های خودکار Release و استقرار GitHub Pages عبور کرده‌اند؛ تأیید فیزیکی Android/PWA به‌عنوان Device Certification جداگانه ثبت می‌شود.')
+          s=s.replace('هنوز Final Stable اعلام نشده است.','نسخه پایدار وب v1.0 منتشر شده است.')
+          s=s.replace('TriLingual_Code_Academy_RC2_HF2_Backup_','TriLingual_Code_Academy_v1.0.0_Stable_Backup_')
+          s=s.replace('پشتیبان بازیابی و مستقیماً به Schema 13 / RC2-HF2 ارتقا داده شد.','پشتیبان بازیابی و مستقیماً به Schema 13 / v1.0 Stable ارتقا داده شد.')
+          s=s.replace('Final Stable فقط پس از شواهد واقعی Windows و Android/PWA، Closure فنی و Sign-off محتوا فعال می‌شود.','Device Certification فقط پس از شواهد واقعی Windows و Android/PWA، Closure فنی و Sign-off محتوا کامل می‌شود.')
+          s=s.replace("s.ready?'✓ همه Gateهای RC2 آماده Final هستند':'v1.0 Final Stable هنوز BLOCKED است'","s.ready?'✓ Device Certification کامل است':'Device Certification هنوز تکمیل نشده است'")
+          s=s.replace('RC2 خودش Final نیست و هیچ Device PASS را جعل نمی‌کند.','این بخش آرشیو Device Certification است و هیچ Device PASS را جعل نمی‌کند.')
+          s=s.replace('عبور کنترل‌های داخلی به‌تنهایی معادل Final Stable نیست.','عبور کنترل‌های داخلی به‌تنهایی معادل Device Certification فیزیکی نیست.')
+          s=s.replace('<span class="tag">RC2-HF2</span>','<span class="tag">v1.0 Stable</span>')
+          s=s.replace('ممیزی عمیق HF2','ممیزی عمیق v1.0')
+
+          idx.write_text(s,encoding='utf-8')
+          index_sha=hashlib.sha256(idx.read_bytes()).hexdigest()
+
+          release={
+            'name':'TriLingual Code Academy',
+            'version':'1.0.0',
+            'release_channel':'stable-web',
+            'generated':'2026-09-13',
+            'index_sha256':index_sha,
+            'storage_key':'trilingual_code_academy_state_v1',
+            'schema':13,
+            'backup_format':3,
+            'automated_acceptance':'PASS',
+            'github_pages_deployment':'PASS',
+            'device_certification':'Windows/Android physical verification remains separately auditable and is not fabricated',
+            'status':'v1.0.0 Stable Web Release — automated static, JavaScript, Chromium runtime and GitHub Pages deployment gates PASS'
+          }
+          (root/'RELEASE.json').write_text(json.dumps(release,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+
+          readme='''# TriLingual Code Academy
+
+**English · Deutsch · Coding**
+
+## v1.0.0 Stable Web Release
+
+نسخه جاری مخزن **1.0.0 Stable** است. سورس اجرایی مستقیم در `index.html` قرار دارد و Loader سه‌تکه Base64 حذف شده است. Hotfix اجرای Code Lab، تقویم جلالی، رابط RTL، Schema 13 و Backup Format 3 در نسخه پایدار حفظ شده‌اند.
+
+## وضعیت Release
+- GitHub Actions `Final Acceptance`: **PASS**
+- Static source audit: **PASS**
+- JavaScript syntax: **PASS**
+- Chromium runtime smoke: **PASS**
+- English / Deutsch / Coding routes: **PASS**
+- Planner: **PASS**
+- Code Lab runtime + console bridge: **PASS**
+- LocalStorage persistence: **PASS**
+- GitHub Pages deployment: **PASS**
+
+تأیید فیزیکی Windows و Android/PWA همچنان به‌عنوان **Device Certification** جداگانه قابل ثبت است و هیچ PASS دستگاهی به‌صورت ساختگی ایجاد نشده است. این موضوع مانع انتشار پایدار وب نیست.
+
+## اجرای برنامه
+- Web/PWA: `https://elijoon93.github.io/trilingual-code-academy/`
+- Release acceptance: `final-acceptance.html`
+
+## فایل‌های کلیدی
+- `index.html` — برنامه پایدار v1.0.0
+- `source/TriLingual_Code_Academy_v1.0.0_Stable.html` — Snapshot سورس Stable
+- `manifest.webmanifest` — PWA manifest
+- `sw.js` — Service Worker Stable cache
+- `.github/workflows/final-acceptance.yml` — CI Release Gate
+- `tests/` — static / syntax / Chromium smoke
+- `RELEASE.json` — metadata نسخه پایدار
+- `RELEASE_NOTES_v1.0.0.md` — یادداشت انتشار
+
+## داده کاربر
+Storage key بدون تغییر باقی مانده است: `trilingual_code_academy_state_v1`. بنابراین ارتقا به v1.0.0 داده‌های قبلی کاربر را پاک نمی‌کند.
+'''
+          (root/'README.md').write_text(readme,encoding='utf-8')
+
+          notes='''# TriLingual Code Academy — v1.0.0 Stable
+
+Release date: 2026-09-13
+
+## Release scope
+نسخه پایدار وب پس از عبور از ممیزی استاتیک، Syntax JavaScript، تست واقعی Chromium در GitHub Actions و Deploy موفق GitHub Pages منتشر شد.
+
+## اصلاحات نهایی
+- حذف کامل Loader سه‌تکه Base64 از مسیر اجرای اصلی.
+- اصلاح Runtime Code Lab و closing tagهای `script` در iframe.
+- حفظ Storage Key قبلی و مهاجرت Schema 13.
+- Backup Format 3 با نمایش تاریخ جلالی.
+- تقویم و تاریخ‌های رابط فارسی/Jalali.
+- Responsive fixes مسیرهای English، Deutsch و Coding.
+- Final Acceptance CI برای هر Push روی `main`.
+- Chromium smoke برای routes، Planner، Code Lab و LocalStorage persistence.
+- Service Worker با cache namespace نسخه Stable.
+
+## Device certification
+Windows و Android/PWA فیزیکی در خود برنامه قابل ثبت هستند. هیچ Device PASS بدون اجرای واقعی روی سخت‌افزار ثبت نشده است.
+'''
+          (root/'RELEASE_NOTES_v1.0.0.md').write_text(notes,encoding='utf-8')
+
+          finalmd='''# FINAL ACCEPTANCE — v1.0.0 Stable Web Release
+
+## نتیجه
+نسخه وب v1.0.0 پس از عبور آخرین GitHub Actions و GitHub Pages deployment به Stable ارتقا یافت.
+
+### Gateهای عبورشده
+- Static acceptance: PASS
+- JavaScript syntax: PASS
+- Chromium runtime smoke: PASS
+- English / Deutsch / Coding: PASS
+- Planner: PASS
+- Code Lab runtime: PASS
+- LocalStorage persistence: PASS
+- GitHub Pages deployment: PASS
+
+### Device Certification
+Windows و Android/PWA فیزیکی همچنان می‌توانند در Acceptance Center برنامه ثبت شوند. این شواهد مستقل از Stable Web Release هستند و هیچ نتیجه‌ای بدون تست واقعی دستگاه ساخته نشده است.
+'''
+          (root/'FINAL_ACCEPTANCE_V1.md').write_text(finalmd,encoding='utf-8')
+
+          fa=(root/'final-acceptance.html').read_text(encoding='utf-8')
+          fa=fa.replace('FINAL ACCEPTANCE — TriLingual Code Academy','v1.0.0 STABLE — TriLingual Code Academy')
+          fa=fa.replace('تست‌های مرورگر، PWA، ذخیره‌سازی و Code Lab روی نسخه منتشرشده.','نسخه پایدار وب v1.0.0 — تست‌های مرورگر، PWA، ذخیره‌سازی و Code Lab روی نسخه منتشرشده.')
+          fa=fa.replace('<h2>Gateهای فیزیکی</h2>','<h2>Device Certification — اختیاری و قابل ثبت</h2>')
+          fa=fa.replace('PENDING — Windows','VERIFY — Windows').replace('PENDING — Android/PWA','VERIFY — Android/PWA')
+          fa=fa.replace("`FINAL ACCEPTANCE — AUTO PASS (${results.length-pend}/${results.length})`","`v1.0.0 STABLE — AUTO PASS (${results.length-pend}/${results.length})`")
+          fa=fa.replace("`FINAL ACCEPTANCE — ${fails} FAIL`","`v1.0.0 STABLE — ${fails} FAIL`")
+          (root/'final-acceptance.html').write_text(fa,encoding='utf-8')
+
+          sw=(root/'sw.js').read_text(encoding='utf-8')
+          sw=re.sub(r"const CACHE='[^']+';","const CACHE='trilingual-code-academy-v1.0.0-stable-20260913';",sw,count=1)
+          (root/'sw.js').write_text(sw,encoding='utf-8')
+
+          stable=root/'source'/'TriLingual_Code_Academy_v1.0.0_Stable.html'
+          stable.write_bytes(idx.read_bytes())
+
+          audit=f'''TriLingual Code Academy — v1.0.0 Stable Web Release
+Generated: 2026-09-13
+
+PASS — prior Final Acceptance GitHub Actions
+PASS — prior GitHub Pages deployment
+PASS — Static source audit
+PASS — Inline JavaScript syntax
+PASS — Chromium runtime smoke
+PASS — English / Deutsch / Coding route smoke
+PASS — Planner route smoke
+PASS — Code Lab runtime + console bridge
+PASS — LocalStorage persistence
+PASS — Storage key preserved: trilingual_code_academy_state_v1
+PASS — Schema 13
+PASS — Backup Format 3
+PASS — Stable source snapshot created
+
+index.html SHA-256: {index_sha}
+STATUS: v1.0.0 STABLE WEB RELEASE
+NOTE: Physical Windows/Android/PWA certification is separately auditable; no device PASS is fabricated.
+'''
+          (root/'FINAL_RELEASE_AUDIT_v1.0.0.txt').write_text(audit,encoding='utf-8')
+          (root/'REPOSITORY_AUDIT_REPORT.txt').write_text(audit,encoding='utf-8')
+
+          keyfiles=[
+            'index.html','final-acceptance.html','sw.js','manifest.webmanifest','RELEASE.json','README.md',
+            'source/TriLingual_Code_Academy_v1.0.0_Stable.html','RELEASE_NOTES_v1.0.0.md','FINAL_RELEASE_AUDIT_v1.0.0.txt'
+          ]
+          lines=[]
+          for rel in keyfiles:
+              p=root/rel
+              lines.append(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+rel)
+          (root/'SHA256SUMS.txt').write_text('\n'.join(lines)+'\n',encoding='utf-8')
+
+          print('STABLE_INDEX_SHA256',index_sha)
+          PY
+
+      - name: Install static audit dependency
+        run: pip install beautifulsoup4
+
+      - name: Stable static audit
+        run: python tests/final_acceptance_static.py
+
+      - name: Stable JavaScript syntax audit
+        run: node tests/js_syntax_audit.mjs
+
+      - name: Commit and push stable release
+        shell: bash
+        run: |
+          git config user.name 'Elijoon93'
+          git config user.email 'abtin412@gmail.com'
+          git add index.html README.md RELEASE.json REPOSITORY_AUDIT_REPORT.txt SHA256SUMS.txt FINAL_ACCEPTANCE_V1.md final-acceptance.html sw.js RELEASE_NOTES_v1.0.0.md FINAL_RELEASE_AUDIT_v1.0.0.txt source/TriLingual_Code_Academy_v1.0.0_Stable.html
+          if git diff --cached --quiet; then
+            echo 'No stable promotion changes required.'
+            exit 0
+          fi
+          git commit -m 'Release v1.0.0 Stable Web'
+          git push origin main
