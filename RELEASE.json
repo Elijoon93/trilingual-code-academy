@@ -1,0 +1,10 @@
+{
+  "product":"TriLingual Code Academy",
+  "version":"1.0.0-rc2-hf2-persian-localization-audit",
+  "status":"RC / NOT FINAL STABLE",
+  "schema":13,
+  "storageKey":"trilingual_code_academy_state_v1",
+  "sourceHtmlSha256":"76f725861fadcbb87a88e47766acb0c459f0ec41edc228cecc3f27d25100a49c",
+  "deployment":"GitHub Pages",
+  "path":"/trilingual-code-academy/"
+}
