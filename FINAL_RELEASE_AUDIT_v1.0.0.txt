@@ -1,0 +1,20 @@
+TriLingual Code Academy — v1.0.0 Stable Web Release
+Generated: 2026-09-13
+
+PASS — Final Acceptance GitHub Actions
+PASS — GitHub Pages deployment
+PASS — Static source audit 16/16
+PASS — Inline JavaScript syntax 13/13
+PASS — Chromium runtime smoke
+PASS — English / Deutsch / Coding route smoke
+PASS — Planner route smoke
+PASS — Code Lab runtime + console bridge
+PASS — LocalStorage persistence
+PASS — Storage key preserved: trilingual_code_academy_state_v1
+PASS — Schema 13
+PASS — Backup Format 3
+PASS — Stable source snapshot created
+
+index.html SHA-256: 2550fac1b17675e9f3922f6f7c9f7f7bd20912f3f17dbb57dc553dc90c5a56bd
+STATUS: v1.0.0 STABLE WEB RELEASE
+NOTE: Physical Windows/Android/PWA certification is separately auditable; no device PASS is fabricated.
