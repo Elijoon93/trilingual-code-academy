@@ -6,13 +6,13 @@ const pageErrors=[];page.on('pageerror',e=>pageErrors.push(String(e)));
 await page.goto(base,{waitUntil:'networkidle'});
 await page.waitForFunction(()=>typeof window.showPage==='function'&&typeof window.openTrack==='function'&&typeof window.openCodeLab==='function'&&typeof window.runCode==='function');
 const core=await page.evaluate(()=>({
-  storageKey: typeof STORAGE_KEY!=='undefined'?STORAGE_KEY:null,
+  storageKey: typeof KEY!=='undefined'?KEY:null,
   schema: typeof db!=='undefined'?db.schema:null,
   lang:document.documentElement.lang,
   dir:document.documentElement.dir
 }));
-if(core.storageKey!=='trilingual_code_academy_state_v1') throw new Error('storage key mismatch');
-if(Number(core.schema)<13) throw new Error('schema < 13');
+if(core.storageKey!=='trilingual_code_academy_state_v1') throw new Error('storage key mismatch: '+core.storageKey);
+if(Number(core.schema)<13) throw new Error('schema < 13: '+core.schema);
 if(!String(core.lang).startsWith('fa')||core.dir!=='rtl') throw new Error('fa/rtl root mismatch');
 for(const t of ['en','de','code']){
   await page.evaluate(t=>openTrack(t),t);
