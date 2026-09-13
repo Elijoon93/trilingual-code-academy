@@ -1,31 +1,20 @@
-TriLingual Code Academy — Code Lab Runtime Hotfix Audit
+TriLingual Code Academy — v1.0.0 Stable Web Release
 Generated: 2026-09-13
-Patch: RC2-HF2 CodeLab Hotfix 1
 
-ROOT CAUSE
-Seven JavaScript-generated </script> closers were double-escaped as <\\/script> in source.
-At runtime they remained <\/script> instead of becoming </script>, so iframe srcdoc could keep learner HTML inside script text and render a blank preview.
+PASS — Final Acceptance GitHub Actions
+PASS — GitHub Pages deployment
+PASS — Static source audit 16/16
+PASS — Inline JavaScript syntax 13/13
+PASS — Chromium runtime smoke
+PASS — English / Deutsch / Coding route smoke
+PASS — Planner route smoke
+PASS — Code Lab runtime + console bridge
+PASS — LocalStorage persistence
+PASS — Storage key preserved: trilingual_code_academy_state_v1
+PASS — Schema 13
+PASS — Backup Format 3
+PASS — Stable source snapshot created
 
-FIX
-All seven double-escaped closers were normalized to the single source escape needed for a real runtime </script>.
-
-PASS — html-parse
-PASS — html-complete
-PASS — lang-fa
-PASS — dir-rtl
-PASS — duplicate-static-ids: duplicates=[]
-PASS — storage-key-preserved
-PASS — schema-13
-PASS — broken-double-escaped-script-closers: count=0
-PASS — safe-script-closers: count=13
-PASS — code-lab-runner-present
-PASS — code-lab-sandbox
-PASS — no-destructive-localstorage-clear
-PASS — visible-gregorian-date-inputs: count=0
-PASS — javascript-syntax: 13/13 PASS
-PASS — index-source-mirror-match: 3d13340d8b64723129d249d44639ee4e813130052faf31681374b6cc60caa1d5
-
-PASS: 15 / 15
-index.html SHA-256: 3d13340d8b64723129d249d44639ee4e813130052faf31681374b6cc60caa1d5
-STATUS: STATIC HOTFIX PASS
-NOTE: Final Stable promotion requires one real-browser acceptance: preview visibly renders and the sample button/JS interaction works.
+index.html SHA-256: 2550fac1b17675e9f3922f6f7c9f7f7bd20912f3f17dbb57dc553dc90c5a56bd
+STATUS: v1.0.0 STABLE WEB RELEASE
+NOTE: Physical Windows/Android/PWA certification is separately auditable; no device PASS is fabricated.
