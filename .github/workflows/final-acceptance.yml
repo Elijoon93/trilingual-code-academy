@@ -1,0 +1,40 @@
+name: Final Acceptance
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install static audit dependency
+        run: pip install beautifulsoup4
+      - name: Static acceptance audit
+        run: python tests/final_acceptance_static.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: JavaScript syntax audit
+        run: node tests/js_syntax_audit.mjs
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Start local app server
+        run: |
+          python -m http.server 4173 --bind 127.0.0.1 > /tmp/tca-http.log 2>&1 &
+          sleep 2
+      - name: Browser runtime smoke
+        run: node tests/browser_smoke.mjs
