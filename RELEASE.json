@@ -1,10 +1,11 @@
 {
-  "product":"TriLingual Code Academy",
-  "version":"1.0.0-rc2-hf2-persian-localization-audit",
-  "status":"RC / NOT FINAL STABLE",
-  "schema":13,
-  "storageKey":"trilingual_code_academy_state_v1",
-  "sourceHtmlSha256":"76f725861fadcbb87a88e47766acb0c459f0ec41edc228cecc3f27d25100a49c",
-  "deployment":"GitHub Pages",
-  "path":"/trilingual-code-academy/"
+  "name": "TriLingual Code Academy",
+  "version": "1.0.0-rc2-hf2-fa-localization-audit",
+  "repository_package": "manual-github-desktop-source",
+  "generated": "2026-09-13",
+  "index_sha256": "76f725861fadcbb87a88e47766acb0c459f0ec41edc228cecc3f27d25100a49c",
+  "storage_key": "trilingual_code_academy_state_v1",
+  "schema": 13,
+  "backup_format": 3,
+  "status": "RC2-HF2 static source package; not Final Stable until real-device gates pass"
 }

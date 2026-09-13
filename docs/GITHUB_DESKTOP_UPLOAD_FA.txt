@@ -1,0 +1,11 @@
+ساده‌ترین روش بارگذاری روی مخزن موجود Elijoon93/trilingual-code-academy
+
+1) GitHub Desktop را باز کنید.
+2) File > Clone repository و مخزن Elijoon93/trilingual-code-academy را Clone کنید.
+3) داخل پوشه Clone شده، همه فایل‌ها را به‌جز پوشه مخفی .git حذف کنید.
+4) تمام فایل‌های این بسته را داخل همان پوشه Clone شده Copy کنید.
+5) GitHub Desktop همه تغییرات را نشان می‌دهد. Summary بنویسید: Publish complete RC2-HF2 source repository
+6) Commit to main را بزنید.
+7) Push origin را بزنید.
+
+تمام. دیگر Loader/Base64 لازم نیست.

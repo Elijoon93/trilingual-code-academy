@@ -23,11 +23,12 @@
 - PASS — `viewport-fit-cover`: width=device-width,initial-scale=1,viewport-fit=cover
 - PASS — `visible-gregorian-date-inputs`: count=0
 - PASS — `javascript-syntax`: 13/13 scripts PASS
-- PASS — `service-worker-syntax`
+- PASS — `service-worker-syntax`: 
 - PASS — `manifest-json`: valid JSON
 - PASS — `manifest-fa-rtl`: fa-IR/rtl
 - PASS — `manifest-icons`: icons=2
 - PASS — `app-version-hf2`: 1.0.0-rc2-hf2-fa-localization-audit
+- PASS — `hf2-version`: HF2 marker
 - PASS — `storage-key-preserved`: stable storage key
 - PASS — `schema-13`: non-destructive schema bump
 - PASS — `jalali-intl`: Intl Persian calendar present
@@ -39,22 +40,23 @@
 - PASS — `theme-names-fa`: theme display names Persian
 - PASS — `grid-minmax-fix`: HF1 layout hardening retained
 - PASS — `roadmap-controlled-overflow`: level rails controlled
-- PASS — `lesson-counts`: English 18 / Deutsch 18 / Coding 12
+- PASS — `lesson-counts`: {'en': 18, 'de': 18, 'code': 12}
+- PASS — `level-coverage`: {"en": ["A1", "A2", "B1", "B2", "C1", "Starter"], "de": ["A1.1", "A1.2", "A2.1", "A2.2", "B1.1", "B1.2", "B2", "C1", "Starter"], "code": ["CSS 2", "Digital 0", "HTML 1", "JS 3", "JS Practical 4", "Projects 5", "Python 6"]}
 - PASS — `unit-exam-depth-engine`: mixed bank minimum 3 questions gate
 - PASS — `lesson-placeholder-gate`: active lesson placeholder audit present
 - PASS — `deep-audit-gate`: HF2 blocks release status on internal audit
-- PASS — `ui-localization-mapping`
-- PASS — `obsolete-dev-card-cleanup`
-- PASS — `about-current-hf2`
+- PASS — `ui-localization-mapping`: missing mappings=[]
+- PASS — `obsolete-dev-card-cleanup`: development-history cards removed from learner surfaces
+- PASS — `about-current-hf2`: current About copy
 - PASS — `static-buttons-named`: unnamed=0
-- PASS — `focus-visible`
-- PASS — `high-contrast-theme`
-- PASS — `font-scale`
-- PASS — `no-destructive-localstorage-clear`
-- PASS — `backup-validation`
-- PASS — `manual-placement`
-- PASS — `service-worker-core`
-- PASS — `package-docs`
+- PASS — `focus-visible`: focus-visible CSS present
+- PASS — `high-contrast-theme`: high contrast theme
+- PASS — `font-scale`: font scaling engine
+- PASS — `no-destructive-localstorage-clear`: no destructive clear call
+- PASS — `backup-validation`: validated restore + HF2 pre-restore snapshot + schema 13 normalization
+- PASS — `manual-placement`: manual placement retained
+- PASS — `service-worker-core`: core offline cache
+- PASS — `package-docs`: all present
 
 ## مواردی که هنوز برای Final باید واقعی انجام شوند
 - PENDING — `physical-windows-runtime`: must be executed on real Windows browser/PWA
