@@ -1,26 +1,31 @@
-TriLingual Code Academy — Repository Package Audit
+TriLingual Code Academy — Code Lab Runtime Hotfix Audit
 Generated: 2026-09-13
+Patch: RC2-HF2 CodeLab Hotfix 1
 
-PASS — html-parse: BeautifulSoup parsed
+ROOT CAUSE
+Seven JavaScript-generated </script> closers were double-escaped as <\\/script> in source.
+At runtime they remained <\/script> instead of becoming </script>, so iframe srcdoc could keep learner HTML inside script text and render a blank preview.
+
+FIX
+All seven double-escaped closers were normalized to the single source escape needed for a real runtime </script>.
+
+PASS — html-parse
+PASS — html-complete
+PASS — lang-fa
+PASS — dir-rtl
 PASS — duplicate-static-ids: duplicates=[]
-PASS — html-lang-fa: fa
-PASS — html-dir-rtl: rtl
-PASS — viewport-fit-cover
-PASS — version-hf2
 PASS — storage-key-preserved
 PASS — schema-13
-PASS — jalali-support
-PASS — no-loader-parts
+PASS — broken-double-escaped-script-closers: count=0
+PASS — safe-script-closers: count=13
+PASS — code-lab-runner-present
+PASS — code-lab-sandbox
 PASS — no-destructive-localstorage-clear
 PASS — visible-gregorian-date-inputs: count=0
-PASS — manifest-json: valid
-PASS — manifest-fa-rtl: fa-IR/rtl
-PASS — manifest-icons: icons=2
-PASS — javascript-syntax: 13/13 scripts PASS
-PASS — service-worker-syntax
-PASS — index-source-hash: 76f725861fadcbb87a88e47766acb0c459f0ec41edc228cecc3f27d25100a49c
-PASS — source-mirror-hash: 76f725861fadcbb87a88e47766acb0c459f0ec41edc228cecc3f27d25100a49c
+PASS — javascript-syntax: 13/13 PASS
+PASS — index-source-mirror-match: 3d13340d8b64723129d249d44639ee4e813130052faf31681374b6cc60caa1d5
 
-PASS: 19 / 19
-STATUS: STATIC PACKAGE PASS
-NOTE: Real-device Windows/Android/PWA and human content review remain outside this static audit.
+PASS: 15 / 15
+index.html SHA-256: 3d13340d8b64723129d249d44639ee4e813130052faf31681374b6cc60caa1d5
+STATUS: STATIC HOTFIX PASS
+NOTE: Final Stable promotion requires one real-browser acceptance: preview visibly renders and the sample button/JS interaction works.
