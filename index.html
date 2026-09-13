@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#8b365f">
+<link rel="manifest" href="./manifest.webmanifest">
+<title>TriLingual Code Academy</title>
+<style>
+html,body{height:100%}body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:#fff7fb;color:#35263a;display:grid;place-items:center;padding:24px;box-sizing:border-box}.box{width:min(620px,100%);background:#fff;border:1px solid #f0dce7;border-radius:24px;padding:24px;box-shadow:0 18px 48px #54294516;text-align:center}.mark{width:66px;height:66px;margin:auto;border-radius:20px;display:grid;place-items:center;background:linear-gradient(135deg,#c14f83,#8b5cc7);color:#fff;font-weight:900;font-size:22px}.bar{height:10px;background:#f0dce7;border-radius:999px;overflow:hidden;margin:18px 0}.bar>span{display:block;height:100%;width:18%;background:linear-gradient(90deg,#c14f83,#8b5cc7);border-radius:inherit;animation:p 1.3s ease-in-out infinite alternate}@keyframes p{to{width:92%}}.muted{color:#786879;font-size:13px;line-height:1.8}.err{color:#991b1b;background:#fee2e2;border:1px solid #fecaca;border-radius:12px;padding:12px;text-align:right;white-space:pre-wrap}.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="box"><div class="mark">TC</div><h1>TriLingual Code Academy</h1><p>در حال بارگذاری نسخه RC2-HF2…</p><div class="bar"><span></span></div><p class="muted">English · Deutsch · Coding<br>نسخه وب از مخزن رسمی پروژه بارگذاری می‌شود.</p><div id="err" class="err hidden"></div></div>
+<script>
+(async()=>{
+ const PARTS=['./app/app-gz-b64-1.txt','./app/app-gz-b64-2.txt','./app/app-gz-b64-3.txt'];
+ const EXPECTED='76f725861fadcbb87a88e47766acb0c459f0ec41edc228cecc3f27d25100a49c';
+ const fail=(e)=>{const x=document.getElementById('err');x.classList.remove('hidden');x.textContent='بارگذاری برنامه ناموفق بود.\n'+String(e?.message||e)+'\nصفحه را یک‌بار Refresh کنید.'};
+ try{
+  if(!('DecompressionStream' in window))throw new Error('مرورگر شما DecompressionStream (gzip) را پشتیبانی نمی‌کند. Chrome/Edge/Firefox/Safari جدید را استفاده کنید.');
+  const texts=await Promise.all(PARTS.map(async p=>{const r=await fetch(p,{cache:'no-cache'});if(!r.ok)throw new Error('دریافت '+p+' با خطای '+r.status);return (await r.text()).trim()}));
+  const raw=atob(texts.join(''));const bytes=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);
+  const ds=new DecompressionStream('gzip');const htmlBytes=new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(ds)).arrayBuffer());
+  if(crypto?.subtle){const d=new Uint8Array(await crypto.subtle.digest('SHA-256',htmlBytes));const h=[...d].map(x=>x.toString(16).padStart(2,'0')).join('');if(h!==EXPECTED)throw new Error('Integrity check failed: '+h)}
+  const html=new TextDecoder('utf-8').decode(htmlBytes);
+  document.open();document.write(html);document.close();
+ }catch(e){console.error(e);fail(e)}
+})();
+</script>
+</body>
+</html>
