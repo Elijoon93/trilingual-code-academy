@@ -17,13 +17,28 @@ html,body{height:100%}body{margin:0;font-family:Tahoma,"Segoe UI",Arial,sans-ser
  const PARTS=['./app/app-gz-b64-1.txt','./app/app-gz-b64-2.txt','./app/app-gz-b64-3.txt'];
  const EXPECTED='76f725861fadcbb87a88e47766acb0c459f0ec41edc228cecc3f27d25100a49c';
  const fail=(e)=>{const x=document.getElementById('err');x.classList.remove('hidden');x.textContent='بارگذاری برنامه ناموفق بود.\n'+String(e?.message||e)+'\nصفحه را یک‌بار Refresh کنید.'};
+ const decodePart=(text,idx)=>{
+   const clean=String(text).replace(/[\s\uFEFF\u200B\u2060]/g,'');
+   if(!/^[A-Za-z0-9+/]*={0,2}$/.test(clean))throw new Error('Base64 Part '+idx+' contains invalid characters');
+   const mod=clean.length%4;
+   if(mod===1)throw new Error('Base64 Part '+idx+' is truncated (length mod 4 = 1)');
+   const padded=clean+'='.repeat((4-mod)%4);
+   const raw=atob(padded);
+   const out=new Uint8Array(raw.length);
+   for(let i=0;i<raw.length;i++)out[i]=raw.charCodeAt(i);
+   return out;
+ };
  try{
   if(!('DecompressionStream' in window))throw new Error('مرورگر شما DecompressionStream (gzip) را پشتیبانی نمی‌کند. Chrome/Edge/Firefox/Safari جدید را استفاده کنید.');
-  const texts=await Promise.all(PARTS.map(async p=>{const r=await fetch(p,{cache:'no-cache'});if(!r.ok)throw new Error('دریافت '+p+' با خطای '+r.status);return (await r.text()).trim()}));
-  const raw=atob(texts.join(''));const bytes=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);
-  const ds=new DecompressionStream('gzip');const htmlBytes=new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(ds)).arrayBuffer());
+  const texts=await Promise.all(PARTS.map(async p=>{const r=await fetch(p,{cache:'no-cache'});if(!r.ok)throw new Error('دریافت '+p+' با خطای '+r.status);return await r.text()}));
+  const chunks=texts.map((t,i)=>decodePart(t,i+1));
+  const total=chunks.reduce((n,c)=>n+c.length,0);
+  const bytes=new Uint8Array(total);
+  let offset=0;for(const c of chunks){bytes.set(c,offset);offset+=c.length;}
+  const ds=new DecompressionStream('gzip');
+  const htmlBytes=new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(ds)).arrayBuffer());
   if(crypto?.subtle){const d=new Uint8Array(await crypto.subtle.digest('SHA-256',htmlBytes));const h=[...d].map(x=>x.toString(16).padStart(2,'0')).join('');if(h!==EXPECTED)throw new Error('Integrity check failed: '+h)}
-  const html=new TextDecoder('utf-8').decode(htmlBytes);
+  const html=new TextDecoder('utf-8',{fatal:false}).decode(htmlBytes);
   document.open();document.write(html);document.close();
  }catch(e){console.error(e);fail(e)}
 })();
