@@ -1,5 +1,5 @@
 'use strict';
-const CACHE='trilingual-code-academy-rc3-final-acceptance-20260913';
+const CACHE='trilingual-code-academy-v1.0.0-stable-20260913';
 const CORE=['./','./index.html','./final-acceptance.html','./offline.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)));self.skipWaiting();});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE&&k.startsWith('trilingual-code-academy-')).map(k=>caches.delete(k)))));self.clients.claim();});
